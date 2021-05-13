@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import datetime
+from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,10 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'iww10b1!9z$*o5uwn08-+@_)tmwy4_=za4t455s@to*19z+%t$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
+# To allow admin page in production
+CSRF_TRUSTED_ORIGINS = ['apiv3.plasmatch.in']
 
 # Application definition
 
@@ -83,17 +86,10 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'classroom_app.serializers.RegisterSerializer',
 }
 
-JWT_AUTH = {
-    # how long the original token is valid for
-    'JWT_VERIFY_EXPIRATION': False,
-    #'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10),
-    # allow refreshing of tokens
-    #'JWT_ALLOW_REFRESH': True,
-
-    # this is the maximum time AFTER the token was issued that
-    # it can be refreshed.  exprired tokens can't be refreshed.
-    #'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=20),
+SIMPLE_JWT = {
+ 'ACCESS_TOKEN_LIFETIME': timedelta(days=10)
 }
+
 SITE_ID = 1
 
 LOGIN_REDIRECT_URL ='/'
@@ -179,5 +175,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_DIR, '../static')
 
 CORS_ORIGIN_ALLOW_ALL = True
